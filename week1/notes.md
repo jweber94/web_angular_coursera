@@ -76,3 +76,39 @@
     - Take the latest angular 1 version, for example angular 1.5.7 and then choose the `angular.js` (or in order to save bandwidth in your web application `angular.min.js`) file to download
     - https://code.angularjs.org/1.5.7/
       * Find this on `develop->download` on the page
++ You need to insert the `angular.js` or `angular.min.js` file into the `src` folder of your website project and include it as a script ***before*** you use ***ANY*** angular functionallities in your own script
+  - Because your browser interprets the website sequenitally
+## Basic usage of angular:
++ Variables that start with a `$` are angular variables (you could define your own variables that start with `$` but it is not recommend to do that in order to make clear what variables come from the angular framework)
++ It is best practice to use an IIFEn for your script
++ You can use the `angular.` object that is defined by the angular script to create new controllers, modules, ...
+  - Syntax: `angular.module('ModName', [dependency, list, of, the, module])`
+    * Link this to a html tag - ideally a very outer tag, in order to make the angular module to be responsible for managing everything from the start of the tag until the closing tag (and everything that is included in between). This is done by the `ng-app` attribute for the html tags
++ The module function of angular returns a module instance!
++ angular module instances have the attribute / sub object `.controller('ControllerName', function(){// view-model/Controller functionality })`
+  - This controller module needs to be bound to the html tag that is should control. Therefore, use the `ng-controller="ControllerName"` attribute for the html tag that you want to control with it.
+  - MVC-Pattern relation: HTML is the view, controller is the controller. The declarative binder is in the case of angular, angular itself.
+## How to exchange data between the HTML page and the javascript code that is using angular?
++ The `$scope` variable:
+  - The `$scope` property/variable of angular are able to expose sub variables to the view (aka HTML page)
+  - In order to place the variables that are defined on the `$scope` variable into the view/html page, you can just use the double curly braces to insert the variable to the html page.
+    * Example:
+    ```
+    <div ng-controller="MyFirstContoller">
+      Hi {{name}}, where name is the variable, defined on the $scope variable of angular
+    </div>
+    ```
+  - We also can call functions and print their return values by using the `{{fncName}}` syntax in the html
++ In order to hand over input from the user to the javascript code, we need to define the `ng-model=` attribute to (e.g.) `<input>` tags
+    - Since the user input is look at if it were a model that the view (aka javascript code) should read in
+    - Example: `<input type="text" ng-model="name">`
+    - Name on the `$scope` varible is then written by the html page
+    - Because using `ng-model` invokes the javascript code in the background, we can directly use the defined input on the `$scope` variable after it was written
+      * Example:
+      ```
+      <div ng-controller="MyFirstController">
+        <input type="text" ng-model="name">
+        Inside the input is: {{name}}
+      </div>
+      ```
+      * If the scope variables is defined on your javascript file as well as an model, the model will overwrite whatever you do on your javascript code

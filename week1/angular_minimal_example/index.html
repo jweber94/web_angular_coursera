@@ -1,0 +1,18 @@
+<!<!DOCTYPE html>
+<html ng-app="myFirstApp">
+  <head>
+    <meta charset="utf-8">
+    <title>My first angular app</title>
+    <script src="angular.js"></script>
+    <script src="script.js"></script> <!-- Needs to be AFTER the angular include in the html page, since html is rendered/analyzed sequentially -->
+  </head>
+
+  <body>
+    <h1>My first angular app</h1>
+    <div ng-controller="myFirstController">
+      Input name: <input type="text" ng-model="name"><br>
+      Say hello to: {{name}}<br>
+      {{sayHello()}}
+    </div>
+  </body>
+</html>

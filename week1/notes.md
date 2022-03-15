@@ -98,6 +98,7 @@
       Hi {{name}}, where name is the variable, defined on the $scope variable of angular
     </div>
     ```
+  - Every `ng-*` marked HTML tag has their own `$scope` variable
   - We also can call functions and print their return values by using the `{{fncName}}` syntax in the html
 + In order to hand over input from the user to the javascript code, we need to define the `ng-model=` attribute to (e.g.) `<input>` tags
     - Since the user input is look at if it were a model that the view (aka javascript code) should read in
@@ -112,3 +113,96 @@
       </div>
       ```
       * If the scope variables is defined on your javascript file as well as an model, the model will overwrite whatever you do on your javascript code
++ `ng-keyup` attribute in html: 
+  - is used to tell the controller that it should run the associated function whenever the key lifts up
+  - It requires a function after the assignment operator that should be invoked whenever the key is lifted up
+    - CAUTION: The function needs to be visible on the `$scope` variable
+## `ng-` attribues
++ The `ng-` attributes are non-standard HTML attributes. 
++ Standard attributes are interpreted by the html parser and realize the common use from W3. 
+  - If the HTML-parser sees a non-standard attribute, it does not throw an error and writes it to the attribute list of the individual HTML tag within the HTML document.  
+  - We can get the attribute by selecting the HTML element and then ask for its attributes or for a specific attribute (like `ng-model`, ...)
+    - Example:
+    ```
+    var elem = document.getElementById("target");
+    console.log(elem.getAttribute("ng-app")); // delivers the rhs of the attribute from the html tag that has the ID "target" 
+    ```
+    - We can also select the element by the occurence of a specific attribute: 
+    ```
+    var elem = document.querySelector("[ng-app]"); 
+    console.log(elem.getAttribute("ng-app")); 
+    ```
+    - This way we can get a handle for the html tag that holds the defined tags
+
+# Dependency Injection (DI)
++ Is another design pattern!
+  - In angular it is used in order to make the global context available via the `$scope` variable!
+  - Everything with a $ in front of its name is in angular called "a service"!
+  - All rhs of `ng-*` from the HTML document are properties that need to be defined from your javascript code and are published to the global scope via the `$scope.*` variable!
+    - Reminder: The keyword after the `ng-` defines a functionallity (e.g. `ng-blur` for invokeing the linked function on the `$scope` variable from javascript if the HTML tag loses focus)
++ Dependency Injection = "Design pattern that implements inversion of control for resolving dependencies"
+  - DI is the design pattern that implements the "inversion of control" logic (IoC)
++ We get the `$scope` object by DI
++ Opposite of the "Composition" pattern, where a class / object has a member of a subclass / another object that implements some function that is called from within surounding class
+  - That would result in tight coupling
++ Inversion of control works by handing over the object / class that should be used from within the calling class. 
+  - Therefore we do not need to change the code within the class / object, since the concrete instance from which the methods are used inside the surounding class are already instanciated!
+  - Add-on: C++ ~ We can define an abstact base class that defines what methods a valid parameter-object need to have and by doing this, we ensure that all methods that are used by the surounding class are there (by marking them pure virtual)
+  - Visualization: 
+  [](images/ioc_pattern.png)
+  - IoC is sometimes called "Don't call us, we call you" - Pattern
+  - The client gets called with the dependency by some system - in our case, the "system" is AngularJS
+
+## `$filter` service 
++ Is an angular service that is used for formating the data that is incoming from the HTML page (aka model)
+  - All default filter functionallities: https://www.w3schools.com/angular/angular_filters.asp
+
+
+### How does dependency injection work in Javascript?
++ If we `console.log(fcn_name)`, we receive the function text back. We could actually convert the printed (function-) object to a string by using its (always for a function object delivered) `.toString()` method
+  - `console.log(fnc_name.toString())`
++ After we received the code as a string back, we could parse the text of it like a normal string
+  - If we now searching for regular expressions that begin with a `$`-sign and uses one of the angular defined services (e.g. filter or scope), we could save this information inject the corresponding service object in case of the function invocation!  
+  - ***Debugging Tipp***: If you want to see a function definition while debugging, you just can call `console.log(fcn_name.toString())` and look at the particular function object instead of looking throu the whole code base!
++ The parsing-and-insertion service that is used (and implemented) by angular is called `$injector`!
+  - If you want to see which services are injected to a function, just add the `$injector` service as an argument to the function and then do the following: 
+  ```
+  console.log($injector.annotate(fnc_name))
+  ```
+## Minification and AngularJS
++ Minification = Transpile javascript code with a program that removes all unnecessary characters that are used to improve readability but is not needed for the function implementation. Also all spaces, tabs and linebreaks are removed
+  - Therefore the resulting javascript file is fully functional but has a much smaller size (which is good in order to optimize for low bandwidths)
+  - In production we should ALWAYS minify our javascript code in order to improve the user experience with short loading times of your webpage!
+  - There are many minification programs on the web - just google for it (sometimes called "uglyfier")
++ We will run into problems with angular services, since `$`-signs as function parameters get deleted by the minification programs!
+  - Two methods to avoid this: 
+    * 1.: Define the parameters to a linked function in angular with an array: 
+    ```
+    angular.module("MyMod", ['$scope', '$filter', fnc_name]);
+
+    function fnc_name ($scope, $filter) {
+      // fnc definition
+    }
+    ```
+    * 2.: Define the function parameter injection with the $inject method on the function that is linked 
+    ```
+    angular.module("MyMod", fnc_name);
+    fnc_name.$inject = ['$scope', '$filter'];
+    ```
+
+# Expressions and Interpolation in AngularJS
++ Expressions = Something that evaluates to some value
+  - Expressions have access to the variables of the scope of the context that they are defined in (e.g. everything between the opening and closing tag of the `ng-module` marked HTML tags)
+  - Expressions also have access to the $scope service
+  - Defined by `{{ expression }}` in the HTML code!
+  - Expressions do NOT throw errors, they just evalute to garbage if they are not valid
+  - flow-control (like `if`-statements) are not allowed within the expression
++ Expressions are used to interpolate the place where they are used in
+  - Interpolation = Process of evaluating a string literal containing one or more placeholders, which are replaced with values
++ You can place fixed variable names (that you can rewrite within your javascript code if you want) into the expression marks
++ You can also place function calls into the expression marks and the result of the function is inserted at the point where the expression marks are placed
++ Expressions are shown in the sources list of the web browsers developer tools but the replaced (and actually displayed) version is shown in the "inspect"/"elements" section of the browsers developer tools
++ ***CAUTION***: If a expression is used within the HTML code _BEFORE_ the angularJS is exaluated (e.g. as a part of the source path to a link or an image), the HTML parser of your browser will show an error, even if the page is correctly displayed.
+  - The reason is that the HTML parser is invoked before the page is completed by AngularJS. 
+  - We can avoid this by not using regular HTML link-definitions but the AngularJS ones: 
+    - `<img ng-src="/path/to/img_{{test}}.png">` 

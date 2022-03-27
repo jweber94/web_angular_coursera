@@ -100,3 +100,43 @@ Fix:
 + We can declare a controller function on a ddo object
     - The `$scope` service of the controller function holds all attributes that are available within the directive that it is associated with it 
 + Example: Lecture 29
+
+# Directive APIs
++ Sometimes we want to change something in the superordinate controller from within the directive. This is not possible without directive APIs, since the directives scope is a subset of the superordinate scope but has no access to its parental scope. 
+    - Especially if we want to hand over data from the directive to the controller (and therefore a function) of the parental controller
+    - In order to do that, we need to setup a "link" from the directives data to a function of the parental controller
+        * Thereby, the parental controller needs to execute the method/function with the data from the directive in ***the parents/controllers execution context, aka with the controllers superordinate scope*** and _NOT_ the directives scope
++ Example is in Lecture 30 
+    - Overview: 
+    [](images/directive_api_1.png)
+    [](images/directive_api_2.png)
+    [](images/directive_api_3.png)
+    [](images/directive_api_4.png)
++ Important note when we do not have access to the outter scope: 
+    - Use javascript `fcnName.call(objName)`
+        * The the fncName will get the objName as its scope
+    - To avoid this, we can use a reference binding by declaring a DDO attribute for the function with an equal sign as its rhs on the scope attribute of the ddo
+## Link with DDOs
++ The link property of the DDO object is used to set up a function (which is associated to the link property) to directly manipulate the DOM und register native (javascript) event listeners
+    - Link functions are used if we could NOT avoid using the angular base functionallities for manipulating the DOM or to integrate another library in the DDO
++ The link function has always a certain set of parameters since it is called by angular (and not by ourselfs)
+    - The basic link function declaration looks as follows
+    [](images/ddo_link_fnc.png)
+    - scope: Scope that is used for the link function ~ This is the scope of the calling DDO
+    - element: Represents the top level element of the directive
+    - attr: Attributes that are declared on the element (by reference)
+    - controller: Reference to the controller that is containing the directive
+    - Angular injects the parameters of the link function by index NOT by name
++ The link function is also used to use other libraries together with angular
++ The advantage of using the link function for direct DOM manipulation in our self defined directive is that the code that is manipulating the DOM directly is nicely encapsulated to the directive and _not_ spread over the whole javascript codebase
++ The `element` parameter of the link function describes the top level element of the *directive*
+
+## Transclusion with AngularJS 
++ Transclusion is used in order to insert a whole HTML template/collection of HTML tags with opening and closing tag into our directive. 
+    - Therefore the HTML part is defined within the `index.html` and then it is linked to our directive's DDO 
++ The scope that the transcluded part is evaluated is the scope of the DDOs parental controller object. 
++ Steps:
+[](images/transclusion_step_1.png)
+[](images/transclusion_step_2.png)
+[](images/transclusion_step_3.png)
++ ***Transclusion is different from the previously described directive API since we can insert complete HTML tags (and their nested tags) and not just some lines or expressions.***

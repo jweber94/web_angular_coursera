@@ -42,6 +42,9 @@
         nidController.found = []; // list that is associated in the index.html
         nidController.narrowOnClick = function(){
             nidController.found = []; // reset list on every new request
+            if (nidController.given_search_term === "") {
+                return; 
+            }
             var prom = MenuSearchService.getMatchedMenuItems(nidController.given_search_term); // input the search term from the HTML page 
             prom
                 .then(function(response){

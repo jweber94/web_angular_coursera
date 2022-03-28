@@ -52,13 +52,10 @@
                 .catch(function(error){
                     console.log("ERROR: An error occured during processing.");
                 });
-            console.log("The data is: ");
-            console.log(nidController.found);    
         };
 
         nidController.removeItem = function(itemIndex) {
             nidController.found.splice(itemIndex, 1);
-            console.log("Remaining found is: ", nidController.found);
         };
     };
 

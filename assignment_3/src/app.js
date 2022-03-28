@@ -3,7 +3,8 @@
     
     angular.module("NarrowItDown", []) // create app aka module
         .controller("NarrowItDownController", NarrowItDownController) // create the controller and associate the controller function with it
-        .service("MenuSearchService", MenuSearchService);
+        .service("MenuSearchService", MenuSearchService)
+        .directive("foundItems", foundItems); // found-items as HTML-tag (normalized name)
 
     // Service definitions
     MenuSearchService.$inject = ['$http']
@@ -34,23 +35,47 @@
     };
 
     // Controller definitions
-    NarrowItDownController.$inject = ['$scope', 'MenuSearchService'];
-    function NarrowItDownController($scope, MenuSearchService){
-        $scope.found = []; 
-        $scope.narrowOnClick = function(){
-            var prom = MenuSearchService.getMatchedMenuItems($scope.given_search_term); // input the search term from the HTML page 
+    NarrowItDownController.$inject = ['MenuSearchService'];
+    function NarrowItDownController(MenuSearchService){
+        var nidController = this; 
+        
+        nidController.found = []; // list that is associated in the index.html
+        nidController.narrowOnClick = function(){
+            nidController.found = []; // reset list on every new request
+            var prom = MenuSearchService.getMatchedMenuItems(nidController.given_search_term); // input the search term from the HTML page 
             prom
                 .then(function(response){
                     for (let i = 0; i < response.length; i++){
-                        $scope.found.push(response[i]); // delivers the result to the scope of the next higher angular scope
+                        nidController.found.push(response[i]); // delivers the result to the scope of the next higher angular scope
                     }
                 })
                 .catch(function(error){
                     console.log("ERROR: An error occured during processing.");
                 });
             console.log("The data is: ");
-            console.log($scope.found);   
-            // display the result on the HTML page 
+            console.log(nidController.found);    
+        };
+
+        nidController.removeItem = function(itemIndex) {
+            nidController.found.splice(itemIndex, 1);
+            console.log("Remaining found is: ", nidController.found);
         };
     };
+
+    // Directive Definition Objects (DDOs)
+    function foundItems() {
+        // factory function 
+        var ddo = {
+            templateUrl: 'src/items_template.html', 
+            scope: {
+                foundElements: '<', // binding the list (handed over variables) from the controller to the directive 
+                onRemove: '&' // reference binding to the function that is handed over in the index.html to the on-remove parameter of the self-defined <found-items></found-items> HTML tag 
+            },
+            controller: NarrowItDownController, 
+            controllerAs: 'nidList', // alias of controller within the DDO template
+            bindToController: true
+        };
+        return ddo; // returns the Directive Definition Object in order to let the AngularJS compiler know how to interpret/compile the associated HTML tag
+    };
+
 })(); 

@@ -1,0 +1,10 @@
+<ol>
+    <li ng-repeat="it in nidList.foundElements">
+        Name: {{ it.name }} <button ng-click="nidList.onRemove({itemIndex : $index});">Don't want this one!</button> <br> 
+        Short Name: {{ it.short_name }} <br>
+        Description: {{ it.description }} 
+        <!-- $index is the AngularJS service for getting the index of ng-repeat. 
+            Here, the $index of the created button element is linked to the removeItem function.
+                If you click the button, the removeItem function is invoked with the index of the element with which the button was created -->
+    </li>
+</ol>

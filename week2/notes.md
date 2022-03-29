@@ -80,3 +80,55 @@
     - Rule of thumb: Max. 2000 watchers for a webpage
 + Overview: 
 [](images/bindings_and_watchers_overview.png)
+
+## `ng-repeat`
++ `ng-repeat` is a directive that extends the functionallity of HTML
+    - i.e. it could create more list elements from one `<li ng-repeat="item in $scope.listItems">{{ item.name }}<li>`
++ Creates an iterator over arrays in the scope of the AngularJS controller within the HTML page
++ If we use an `ng-repeat`attribute on our HTML page, a `$index` service is available. This service reflects the number of the index (started by 0) that the currently used by the iterator and is persistent over the time that the HTML page is rendered for the individual element that was repeated.
+### `ng-repeat` with filters
++ All javascript arrays have an attribute (-object) that is called `.filter(filterFcnPtr)` 
+    - Here is `var filterFcnPtr = function(value) {//process single value and return it}`
+    - The filter function will be applied to ***ALL*** elements of the array from which the filter attribute is called
+    - Reference: https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
++ By using a filter function within the `<li ng-repeat="item in shoppingList | filtername : parameterFilterFcn">{{ item.name }}</li>`, we can link an `ng-model` from our HTML page (and therefor a user input) and filter it on the fly, while the user is typing something into it
+    - This is a very neat kind of filtering a list for the user interaction!
+    - See Lecture 18 Week 2 for more details!
+
+## Prototypal Inheritance
++ Is a basic construct in Javascript
+    - Prototypal inheritance is a simpler version of inheritance then class inheritance!
++ If a child of a parent class overwrites a property that was already defined on its parental class, the attribute of the parental class gets masked and therefore, if you call that argument on the instance of the child element, you will receive the value that was defined on the child definition!
+[](images/prototypal_inheritance_theory.png)
++ Syntax: 
+    - `var child = Object.create(parent);`
++ The javascript engine creates then on the background a `__proto__` attribute on the child instance. 
+    - Here, all attributes of the parent are stored!
+    - Even if we can rewrite an attribute on the child, we can access the parents value by handing over the full path to the individual value (See lecture 19 part 2)
++ If the javascript engine does not find a value on a child instance, it will walk up and look for the property/attribute on their parents properties/attributes
++ Regard to AngularJS: If we define nested controllers, the nested controller prototypical inherits the attributes of its superordinate controller
+### Reminder: 
++ We can create classes in javascript by using a function constructor (aka define an object by invoking a function which is defining attributes on the `this` element)
+    - Typically, a function constructur starts with a capital letter as its function name
+## Scope Inheritance
++ If we use a controller from inside a controller in the HTML page, the inner controller will inherit all properties/attributes from the superordinate controller. 
+    - This is called scope inheritance! 
+    - The basic inheritance functionallity is the above described prototypal inheritance
++ If we want to change a property for all subordinate controllers, we can change the property of the parent by going up the inheritance scope!
++ In order to avoid overwriting, we can use the `<div controller1 as ctrl1></div>`
++ If we then use the controller within the HTML page, it is always clear, what controller property / attribute should be used!
+    - See Lecture 19 Part 3 for details
++ Angular delivers a `$parent` service to access parent attributes for nested controllers
++ If we have nested controllers, the inner controllers `$scope` inherits from the outter controllers `$scope`
+
+# Custom Services in AngularJS
++ Controllers should only be used to 
+    - Setup initial state for `$scope`
+    - Setup behaviour for `$scope`
++ Service should be used to implement 
+    - Business logic!
+    - Share code across controllers --> Reuse of code that defines some functionallity is done as a (custom) service in AngularJS!
++ Services in AngularJS are realized as a Singleton design pattern!
+    - All controllers that use the same service object are all use the same memory locations, etc --> The exact same service!
+    - The singleton is "lazily instantiated" --> That means, the service object is only created if the service is acutally (and for the first time in the code) used!
+        * That safes memory and calculation effort!

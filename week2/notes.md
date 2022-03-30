@@ -128,7 +128,46 @@
 + Service should be used to implement 
     - Business logic!
     - Share code across controllers --> Reuse of code that defines some functionallity is done as a (custom) service in AngularJS!
+        * If we reuse a function in two controllers, we need to write a wrapper function around the service function for the individual controller! Then, we can use the service function within the HTML page from the opening to the closeing tag within the HTML page. See Lecture 20 Part 2 for details. --> The Code of the functionallity is reused but we need a boiler plate code part for wrapping the service function within the controller. 
 + Services in AngularJS are realized as a Singleton design pattern!
     - All controllers that use the same service object are all use the same memory locations, etc --> The exact same service!
     - The singleton is "lazily instantiated" --> That means, the service object is only created if the service is acutally (and for the first time in the code) used!
         * That safes memory and calculation effort!
++ Services could also be used to share data between AngularJS controllers
+
+## Factory Design Pattern
++ Factory  Design Patter = A central place that produces new objects or functions that are build by a handed over construction plan
+
+### Factory service in AngularJS (`.factory()`):
++ The `.factory()` method of AngularJS is _NOT_ another way of creating the same service that will be created with the `.service()` function/method on the `angular.app("AppName", [])` object!
+    - _BUT_ `.service()` is also a factory, but much more limited compared to `.factory()`
+    - `.service()` produces always the same type of service (a singleton) whithout the possibilty to configure its behaviour. To configure this, it is only possible to use the `.factory()` method.
++ We also need to define a factory function for the creation of the service!
++ Difference between `.service()` vs `.factory()`
+    - `.service()`: 
+        * Creates a singleton with lazily initilazation
+        * Is a restricted form of a factory 
+        * The service function is the construction scheme how to create the _instance_ of the service
+    - `.factory()`:
+        * Creates one instance (of possibly multiple instances - therefore no singleton) of the service that is defined within the creation function of the associated factory function
+        * The factory function needs to be defined by a scheme that the factory method accepts (See the documentation or Lecture 21 part 1 for details)
+        * The programmer is responsible how new instances (or even if just one instance) should be created by the factory function
++ ***Add on***: Javascript is able to throw errors
+    - Therefore it has an `Error()` native class
+## The `.provider()` method on the `angular.module("nameMod", [])` object
++ Can be used to define an arbitrary factory on bootstrap of the angular module
++ We can hand over a factory function on the provider a configuration with the `.config()` method on the `angular.module("nameMod", [])` object
++ The `.provider()` method gets called behind the scenes if we define a service or a factory on an angular module!
+    - By calling it directly, we are able to implement some basic functionallities into the angular framework
++ The provider function needs to have a `this.$get = fncptr` for the factory function that the provider is attached to!
+    - See Lecture 22 Part 1 for more details
++ By delivering a `.config()` function and inject the provider to it, we can overwrite parameters of the provider factory!
+    - See Lecture 22 part 2 with the `.config()` 
+    - The config function is called ***before*** any instance of the provider service in instanciated!
+## Furter AngularJS directives
++ `ng-if`:
+    - If the expression that is assigned to the rhs in the HTML page evaluates to true, the part of the HTML page from the corresponding opening to the closing tag is inserted to the HTML page and if it evalues to false it will be _completly replaced_! There will be no HTML tag on the rendered page.
++ `ng-show`: 
+    - The same as `ng-if` but the HTML tag will be present at all time but it will _NOT_ be rendered since angular makes some CSS settings such that the part of the HTML page from the opening to the closing tag will NOT be displayed!
++ `ng-hide`: 
+    - Logical negation of `ng-if`

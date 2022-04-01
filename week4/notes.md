@@ -81,4 +81,44 @@
 + _ALL_ `.config()` methods of modules get invoked first before angular creates the modules 
 + Example: Lecture 35 part 2
 
+ ## Routing in AngularJS
  
+ ### Classical Client-Server Interaction: 
+ + Minor updates of the page (i.e. a name was entered to a list in the HTML page) will cause a completly new created page from the server. This is called "coarse-granined updated"
+ + Routing from view to view is done by the server
+ [](images/coarse_grained_updates.png)
+ ### Web 2.0 Client-Server Communication:
+ + Minor updates of the page need a request to the server and the server then sends the data only the relevant data back. Then, the data gets rendered through the javascript engine. This is called "fine-grained updates".
+ + Routing through views is also done by the server
+[](images/web2_0.png)
+
+==> The problem with the two above approaches is that it is not possible to go back with user entries to older states of the website. The user needs to insert user names, items, ... (all user interaction) again to restore the latest website state. 
+
+### Single Page Application (SPA) Model
++ Update the view with javascript
+    * The browser still thinks that a new web page is loaded! 
++ The `#` on a GET, POST, ... request from the client (aka browser) tells javascript to ***NOT*** request a new ressource from the server ***BUT*** to go to another view that was already transmitted by the initial `index.html`. Remark: The change of the view _could_ cause a request for data from the server _OR_ cause a request for a new template from the server
+    - If you see a `#` in the browsers URL, you can guess that the website you are currently on is a single page web application!
+    - This enables us to go back and forth with the buttons on the browser window! (Because all states are saved as a url in the browser history)
+        * Modern browsers could do this without the `#` in front of the URL, if we use HTML5 mode
++ Routing is done by the client (aka browser)
+[](images/spa_1.png)
++ Besides the `#` method, it is possible to implement a SPA model by only using javascript to render the page partly new. 
+    - The state is then safed in a javascript object. (Instead of safeing it into the browser URL)
+[](images/spa_2.png)
+
+## Routing with AngularJS
+[](images/routing_libraries_with_angular.png)
++ Step 1: Load the routing package _AFTER_ the normal `angular.js` package, since the routing package is dependend on the normal angular package. 
+[](images/routing_step_1.png)
++ Step 2: Define a place in the HTML page where the interchangeable view should be placed
+[](images/routing_step_2.png)
++ Step 3: Declare the UI-router as a dependency
+[](images/routing_step_3.png)
++ Step 4: Define a configuration though `.config()` for the routing service and inject the configuration services into the routing object.
+[](images/routing_step_4_1.png)
+[](images/routing_step_4_2.png)
+    * The UI states need a unique name and a unique url whereas the URL is optionally. If you do not hand over a URL it is deduced by the states name
+    * The `.state(...)` is chainable on the `$stateProvider` service, such that we can define multiple states on it.  
+    * If a url is not implemented, we can define a `.otherwise(...)` method where the user will be routed to if an invalid state / url was requested!
+[](images/routing_step_4_3.png) 

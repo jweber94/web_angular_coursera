@@ -122,3 +122,62 @@
     * The `.state(...)` is chainable on the `$stateProvider` service, such that we can define multiple states on it.  
     * If a url is not implemented, we can define a `.otherwise(...)` method where the user will be routed to if an invalid state / url was requested!
 [](images/routing_step_4_3.png) 
+### Download the UI-Router package for AngularJS
++ The version used in this course is 0.3.1 (the latest stable version)
+    - See all version: https://cdnjs.com/libraries/angular-ui-router/0.3.1
+    - This is the link for the version: https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.1/angular-ui-router.js
+        * Download this with `$ curl https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.1/angular-ui-router.js -o angular-ui-router.js`
++ The `ui-router` brings some new HTML tag-attributes with it to link states to bottons, links, ... 
+    - e.g. `<a ui-sref="stateName"></a>`
+        * sref = state reference 
+        * `ui-sref` does ***NOT*** need a URL but _can_ use it. If no url is defined on the javascript object of the ui-router state, the reference could be set by the name of the state!
++ See a very basic implementation example in the code of Lecture 36 part 2
++ The AngularJS controller could be associated with a state of the ui-router by defining it within the `.state()` method. 
+[](images/state_controller.png) 
+    * The name of the controller could be defined directly on the state definition and does not need an extra tag attribute in the template. See Lecture 37 part 2 for more details. 
+## `resolve` property on the state definition 
++ We can hand over services or data to a state (and therefore into the associated controller) by using the `resolve` property. 
+    * If the resolved data is an asynchronous call, the resolve will wait until the promise from the asynchronous call is filled with data. 
+    * See Lecture 38 part 2 for Details
++ Main takeaway: If we use resolve, the state will be rendered always after the data is completly resolved. If not, the page will not be shown/rendered! 
+## Routing with parameters within the URL 
++ We can use parameters in the state URLs (quiet like the query parameter in HTTP requests within URLs)
+[](images/spa_url_parameters.png)
+[](images/spa_url_parameters_2.png)
+[](images/spa_url_parameters_3.png)
+### Example of routing with parameters: 
++ Clickable lists that points to details
++ _See Lecture 39 part 2 for a VERY good example of it!!!_
+    * Remark: If we hardcode the properties and do not get the information from a server, we do not need to implement it this way, since we could link another page in our URL space on the server where the pages comes from. But for learning purposes or to get data from a server this is a very good way of doing this! 
+
+## Nested views and routing
++ Sometimes we do NOT want to define a new state for a view of our web page, since the data that we already requested for the current state of our application is only viewed in a different way. 
+    * In order to reuse the already requested data, we can define child-states on a state. 
+        - A child state inherits all data from the parent state and therefore it can use it without a new server call. 
++ The above described pattern is the ***Master Details View Pair***!
++ Syntax: 
+[](images/child_state_spa.png)
+    + The nameing is not like in the picture. We need to use the concrete names of the parents and the childs state (not just `.child`)
++ Inserting the data to the controller of the child state: 
+[](images/child_state_spa_2.png)
++ The `$stateParams` gives us the parameters from the states URL (See Routing with parameters within the URL)
++ See Lecture 40 part 2 for an implementation example
+
+## Router State Transition Events
++ It is possible to fire up a function on some events that the UI-router triggers. I.e. making a request, handling a failed request, ...
+    * With this it is possible to show a loading bar while data from the server is retrieved etc. 
++ ***All browser events are fired at the `$rootScope` level of the scopes!***
+    * Therefore, all directives/modules down the DOM _can_ (not must!) respond to the event. 
+    * This is a kind of message passing through out _ALL_ modules of the web application 
++ `$stateChangeStart`:
+    * Fires when the state change begins --> Good for invokeing a loading screen on the page
+    [](images/state_change_start.png)
++ `$stateChangeSuccess`:
+    * Fires when the state change finished --> Good for stopping the loading screen
+    [](images/state_change_success.png)
++ `$stateChangeError`:
+    * Fires when an error occures while the state transition is tried out. --> NO ERROR WILL BE DISPLAYED ON A FAILED STATE TRANSITION. Only this message will be fired!
+    [](images/state_change_error.png)
+
+==> Documentation for UI-Router: 
+https://github.com/angular-ui/ui-router

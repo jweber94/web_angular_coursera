@@ -14,8 +14,27 @@
 + Code separation into more then one javascript file: 
     - _Lecture 35 part 2 video_ from week 4 
     - File naming convention: 
-        * `filename.type.js`
+        * `componentname.type.js`
         * Here is 
-            + `filename` the actual filename that defines the code within the file
+            + `componentname` the name of the component/module that defines the code within the file
             + `type` is the kind of angular module that is contained within the file. I.e. `module`, `component`, `service`
     - Make sure that the sequence of the inclusion of the files is done in a way that notting is used before it is interpreted by the javascript engine of the browser (ref.: "forward declaration")
+
+## Implementation details
++ ***Angular Modul definition:***
+    - All parts of the angular implementation needs to be within an IIFE!
+    - The angular module needs to be defined on *ALL* files!
++ One-Way-Binding: 
+    - Bind a value from the component to the view (aka DOM, like in our example in the assignment) _OR_ from the view to the component.
+    - The binding works onedirectional. You can not see changes from the perspective of the bound part of the binding. Only changes from the bound part are visible within the aimed part!
++ The `$stateProvider` service of angular UI-router is used to define reproduceable states of a route (or as states of the web application)
+    - Reference: https://www.edureka.co/blog/stateprovider-in-angularjs/#:~:text=%24stateProvider%20is%20used%20to%20define,concept%20of%20%24stateprovider%20in%20AngularJS.
+
+## Important to note from the assignment explaination:
++ We do *NOT* need to show an individual item view! 
+    - It is only necessary to show the list of items within the choosen category!!!
+
+# Next Step to finish the homework: 
+1.: Make the categories state run properly by listing the categories from the server within the state ~ Finishing categories state(Tue)
+2.: Make the listings clickable and get the data for the items from the server ~ finishing items state (Wed)
+3.: Make sure that we can copy the link (Thu)

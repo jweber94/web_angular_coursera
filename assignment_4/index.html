@@ -5,7 +5,7 @@
     <title>Restaurant Menu</title>
 
 </head>
-<body>
+<body ng-app="MenuApp">
     <h1>Welcome to our restaurant</h1>
 
     <!-- showing off the viewport of the ui router -->
@@ -15,6 +15,10 @@
     <script src="lib/angular.js"></script> <!-- needs to be included BEFORE the ui router, since the ui router depends on some angular definitions -->
     <script src="lib/angular-ui-router.js"></script>
 
+    <!-- modules for the web app - forward declaration of the modules for the web app -->
+    <script src="src/categories/data.module.js"></script> <!-- MUST come before menuapp because menuapp depends on the data module -->
+    <script src="src/categories/menuapp.module.js"></script>
+
     <!-- routes -->
     <script src="src/routes.js"></script>
     
@@ -22,6 +26,6 @@
     <script src="src/categories/menudata.service.js"></script>
     <script src="src/categories/categories.component.js"></script>
     <script src="src/categories/items.component.js"></script>
-    <script src="src/categories/data.module.js"></script>
-    <script src="src/categories/menuapp.module.js"></script>
+    
+    
 </body>

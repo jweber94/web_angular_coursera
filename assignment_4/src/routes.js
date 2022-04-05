@@ -17,7 +17,14 @@
 
             .state('categories', {
                 url: '/categories',
-                templateUrl: 'src/categories/templates/categories_template.html'
+                templateUrl: 'src/categories/templates/main_categories_template.html',
+                controller: 'CategoriesController as catCtrl', 
+                resolve: { 
+                    categorieItems: ['MenuDataService', function (MenuDataService) {
+                            return MenuDataService.getAllCategories(); 
+                        }
+                    ]
+                } 
             });
 
             //.state('');

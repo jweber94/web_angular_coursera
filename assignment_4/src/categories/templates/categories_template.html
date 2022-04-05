@@ -1,7 +1,9 @@
+<a ui-sref="home">Home</a> &lt; <span>Our Categories</span>
 <ul>
-    <!-- <li ng-repeat="item in $ctrl.m_items" -->
-        <!-- ui-sref="mainList.itemDetail({itemId: $index})"> -->
-    <!-- </li> -->
-    <li>Hello</li>
-    <li>World</li>
-  </ul>
+    <li ng-repeat="item in $ctrl.catItems">
+        <!-- ui-sref="itemDetail({itemId: $index})"> -->
+      {{ item }}
+    </li>
+</ul>
+
+<!-- $ctrl is a special service within angular components that are used to access the associated components defined attributes (that can be set by using the component HTML tag) -->

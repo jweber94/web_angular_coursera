@@ -5,7 +5,7 @@
         .component('categories', {
             templateUrl: 'src/categories/templates/categories_template.html', // absolute path from the root of the web app
             bindings: {
-                m_categories: '<' // TODO: Check this // one way binding
+                catItems: '<' // one way binding
             }
         }); 
 

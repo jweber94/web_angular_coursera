@@ -29,6 +29,15 @@
     - The binding works onedirectional. You can not see changes from the perspective of the bound part of the binding. Only changes from the bound part are visible within the aimed part!
 + The `$stateProvider` service of angular UI-router is used to define reproduceable states of a route (or as states of the web application)
     - Reference: https://www.edureka.co/blog/stateprovider-in-angularjs/#:~:text=%24stateProvider%20is%20used%20to%20define,concept%20of%20%24stateprovider%20in%20AngularJS.
++ Angular Components: 
+    - Define a HTML tag!
+    - Can be used within templates or the main HTML page
+    - A Component ***DOES NOT NEED*** a controller (but they can have one)
+    - A Component is ***NOT** a part of a UI-Router state!
++ UI-Router states ***CAN*** have a controller but they _do not need_ to have one!
++ If we work with UI-Router and angular components together, we need to define a component completly separate from the template that is used by the UI-Router `templateUrl`!
+    - This leads to the double definition of th `main_categories.html` and the `categories.html`! 
+
 
 ## Important to note from the assignment explaination:
 + We do *NOT* need to show an individual item view! 

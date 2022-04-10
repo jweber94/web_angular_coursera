@@ -9,31 +9,20 @@
     function MenuDataService($http){
         var mdservice = this; 
 
-        // Helper function
-        mdservice.extractCategoryData = function (serverCatData) {
-            var resulting_categories = []; 
-            for (var i = 0; i < serverCatData.length; i++){
-                resulting_categories[i] = serverCatData[i].name;
-            }
-            return resulting_categories;
-        };
-
         mdservice.getAllCategories = function() { 
-            return $http({                                          // defining the http request
+            var response = $http({
                 method: "GET",
                 url: "https://davids-restaurant.herokuapp.com/categories.json"
-            })
-            .then( function(response) {                         // processing the response(-promise) from the server
-                var foundItems = mdservice.extractCategoryData(response.data); // converts the body of the response automatically into javascript object in case of json data 
-                return foundItems; 
-            }, function(error){
-                console.log("ERROR: Something went wrong! Please contact the developer.");
             });
+            return response;
         };
 
         mdservice.getItemsForCategory = function (categoryShortName) {
-            console.log("MenuDataService getItemsForCategory was called.");
-            return categoryShortName;
+            var requestURL = "https://davids-restaurant.herokuapp.com/menu_items.json?category=" + categoryShortName;
+            return $http({
+                method: "GET",
+                url: requestURL
+            });
         };
     };
 })(); 

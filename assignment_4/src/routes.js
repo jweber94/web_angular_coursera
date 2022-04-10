@@ -21,13 +21,35 @@
                 controller: 'CategoriesController as catCtrl', 
                 resolve: { 
                     categorieItems: ['MenuDataService', function (MenuDataService) {
-                            return MenuDataService.getAllCategories(); 
+                            return MenuDataService.getAllCategories()
+                                .then( function(response) { 
+                                    return response.data;}
+                                , function(error) {
+                                    console.log("Error in server request for the categories.");
+                                }
+                            ); 
                         }
                     ]
                 } 
-            });
+            })
 
-            //.state('');
+            .state('catItems', {
+               url: '/categories/{categoryName}',
+               templateUrl: 'src/categories/templates/items_template.html',
+               controller: 'CategorieDetailController as CatDetailCtrl',
+               resolve: {
+                   categorieItems: ['$stateParams', 'MenuDataService', 
+                       function($stateParams, MenuDataService) {
+                           return MenuDataService.getItemsForCategory($stateParams.categoryName)
+                            .then(function(response) { 
+                                return response.data; 
+                            }, 
+                            function(error) {
+                                console.log("Error while requesting the categorie details for short_name=", $stateParams.categoryName); 
+                            });
+                       }]
+               }
+            });
 
     };
 })(); 

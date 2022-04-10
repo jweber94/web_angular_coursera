@@ -6,8 +6,8 @@
 
     CategoriesController.$inject = ['categorieItems'];
     function CategoriesController (categorieItems) {
-        var CatCtrl = this; 
-        CatCtrl.categorieItems = categorieItems; // safe the resolved categories from the router state within the controller scope 
+        var CatCtrl = this;
+        CatCtrl.catData = categorieItems;
     }
 
 })(); 

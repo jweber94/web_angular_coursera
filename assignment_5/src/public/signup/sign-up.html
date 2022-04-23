@@ -4,28 +4,28 @@
     <form name='signupForm' novalidate> <!-- novalidate tells the browser to not check the form by the html renderer since we want to do it on our own with angularJS -->
         <!-- First Name -->
         <div>
-            <span class="formLettersInvert">First Name (*):</span> <input type="text" name="username" ng-required="required" ng-minlength="2" class="formLetters" ng-model="signForm.user.username" placeholder="Enter your first name">
-            <span ng-if="signupForm.username.$error.minlength && signupForm.username.$touched">Name is required!</span>
+            <span class="formLettersInvert">First Name:</span> <input type="text" name="username" required ng-minlength="2" class="formLetters" ng-model="signForm.user.username" placeholder="Mandatory">
+            <span ng-if="(signupForm.username.$error.minlength || signupForm.username.$error.required) && signupForm.username.$touched">Name is required!</span>
         </div>
         
         <!-- Last Name -->
         <div>
-            <span class="formLettersInvert">Last Name (*):</span>  <input type="text" name="lastname" ng-required="required" ng-minlength="2" class="formLetters" ng-model="signForm.user.lastname" placeholder="Enter your last name">
+            <span class="formLettersInvert">Last Name:</span>  <input type="text" name="lastname" required ng-minlength="2" class="formLetters" ng-model="signForm.user.lastname" placeholder="Mandatory">
             <span ng-if="signupForm.lastname.$error.minlength && signupForm.lastname.$touched">Last name is required!</span>
         </div>
 
         <div>
-            <span class="formLettersInvert">E-Mail Address: (*):</span>  <input type="text" name="email" ng-required="required" ng-minlength="5" class="formLetters" ng-model="signForm.user.email" placeholder="Enter your Email-Address">
+            <span class="formLettersInvert">E-Mail Address:</span>  <input type="text" name="email" required ng-minlength="5" class="formLetters" ng-model="signForm.user.email" placeholder="Mandatory">
             <span ng-if="signupForm.email.$error.minlength && signupForm.email.$touched">Email is required!</span>
         </div>
 
         <div>
-            <span class="formLettersInvert">Phone Number (*):</span>  <input type="text" name="phone" ng-required="required" ng-minlength="6" class="formLetters" ng-model="signForm.user.phone" placeholder="Enter your phone number">
+            <span class="formLettersInvert">Phone Number:</span>  <input type="text" name="phone" required ng-minlength="6" class="formLetters" ng-model="signForm.user.phone" placeholder="Mandatory">
             <span ng-if="signupForm.phone.$error.minlength && signupForm.phone.$touched">Phone number is required!</span>
         </div>
 
         <div>
-            <span class="formLettersInvert">Favourite Dish Number: (*)</span> <input type="text" name="favdish" ng-required="required" ng-maxlength="2" class="formLetters" ng-model="signForm.user.favdish" placeholder="Enter the shortname of your favourite dish">
+            <span class="formLettersInvert">Favourite Dish Number:</span> <input type="text" name="favdish" required ng-maxlength="2" class="formLetters" ng-model="signForm.user.favdish" placeholder="Mandatory">
             <span ng-if="signupForm.favdish.$error.minlength && signupForm.favdish.$touched">Favourite dish number is required!</span>
         </div>
 
@@ -33,4 +33,14 @@
             <button ng-click="signupCtrl.submitForm(signForm.user.username, signForm.user.lastname, signForm.user.email, signForm.user.phone, signForm.user.favdish)" class="formLetters">Submit</button>
         </div>
     </form>
+
+    <div ng-if="signupCtrl.formSubmitted">
+        <span ng-if="!signupCtrl.savingSuccessful" class="signupMsg">No such menu exists</span>
+        <span ng-if="signupCtrl.savingSuccessful" class="signupMsg">Your information has been saved</span>
+    </div>
+
+    <div ng-if="signupCtrl.invalidForm">
+        <span class="signupMsg">Invalid entrys were submitted! Please enter valid data and then submit again.</span>
+    </div>
+
 </div>

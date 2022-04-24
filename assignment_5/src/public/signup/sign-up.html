@@ -35,8 +35,8 @@
     </form>
 
     <div ng-if="signupCtrl.formSubmitted">
-        <span ng-if="!signupCtrl.savingSuccessful" class="signupMsg">No such menu exists</span>
-        <span ng-if="signupCtrl.savingSuccessful" class="signupMsg">Your information has been saved</span>
+        <span ng-if="signupCtrl.fav_meal_Data == undefined && signupCtrl.request_finished" class="signupMsg">No such menu exists</span>
+        <span ng-if="signupCtrl.fav_meal_Data !== undefined && signupCtrl.formSubmitted" class="signupMsg">Your information has been saved</span>
     </div>
 
     <div ng-if="signupCtrl.invalidForm">
